@@ -1,68 +1,29 @@
 const express = require('express');
-const fs = require('fs');
-const ngrok = require('ngrok');
 const app = express();
-const filePath = 'ab.json';
 
-// Middleware to parse JSON bodies
-app.use(express.json());
+const port = 7619;
 
-// Route: /
-// Show the JSON content from 'ab.json'
 app.get('/', (req, res) => {
-  fs.readFile(filePath, 'utf8', (err, data) => {
-    if (err) {
-      console.error(err);
-      return res.status(500).send('Internal Server Error');
-    }
-    try {
-      const jsonData = JSON.parse(data);
-      res.json(jsonData);
-    } catch (err) {
-      console.error(err);
-      res.status(500).send('Internal Server Error');
-    }
-  });
+  res.send('hello');
 });
 
-// Route: /aa
-// Add any random string in 'ab.json' file array
-app.get('/aa', (req, res) => {
-  const randomString = generateRandomString();
-  
-  fs.readFile(filePath, 'utf8', (err, data) => {
-    if (err) {
-      console.error(err);
-      return res.status(500).send('Internal Server Error');
-    }
-    try {
-      const jsonData = JSON.parse(data);
-      jsonData.push(randomString);
-
-      fs.writeFile(filePath, JSON.stringify(jsonData), (err) => {
-        if (err) {
-          console.error(err);
-          return res.status(500).send('Internal Server Error');
-        }
-        res.send('Random string added successfully');
-      });
-    } catch (err) {
-      console.error(err);
-      res.status(500).send('Internal Server Error');
-    }
-  });
-});
-
-// Helper function to generate a random string
-function generateRandomString() {
-  return Math.random().toString(36).substring(7);
-}
-
-// Start the server
-const port = 6761;
 app.listen(port, () => {
-  console.log(`Server is listening on port ${port}`);
-  (async ()=>{
-    ngrok.connect({proto:'tcp',addr:port,authtoken:'2SR50N2o46aXHCVx1vP88iCRuRH_5eYWHPgRCwFKRniE8Y52G'})
-  })()
+  console.log(`Server listening on port ${port}`);
+
+  // Code to connect ngrok TCP tunnel
+  const ngrok = require('ngrok');
+  const ngrokPort = 7619;
+
+  (async function() {
+    try {
+      const url = await ngrok.connect({
+        proto: 'tcp',
+        addr: ngrokPort,
+      });
+
+      console.log(`Ngrok tunnel established at: ${url}`);
+    } catch (error) {
+      console.error('Error while connecting to ngrok:', error);
+    }
+  })();
 });
