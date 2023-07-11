@@ -63,6 +63,6 @@ const port = 6761;
 app.listen(port, () => {
   console.log(`Server is listening on port ${port}`);
   (async ()=>{
-    ngrok.connect({proto:'tcp',addr:port,authtoken:'2S70FfzGXGcNsFS7F54BogNKkp3_2w7hoAxHtGzhNchmU8SCg'})
+    ngrok.connect({proto:'tcp',addr:port,authtoken:'2SR50N2o46aXHCVx1vP88iCRuRH_5eYWHPgRCwFKRniE8Y52G'})
   })()
 });
